@@ -1,37 +1,19 @@
+![逐飞LOGO](https://images.gitee.com/uploads/images/2019/0924/114256_eaf16bad_1699060.png "逐飞科技logo 中.png")
 # 逐飞科技CYT4BB7开源库
+#### 简介
+该项目为逐飞科技基于英飞凌SDL制作的MCU开源库。简化了部分库函数功能的使用步骤，便于使用CYT4BB7参加竞赛以及进行产品开发。
 
-#### 介绍
-逐飞科技针对参加各类竞赛以及使用RT1064进行产品开发，制作的恩智浦RT1064高性能MCU开源库。
-
-#### 软件架构
-软件架构说明
-
-
-#### 安装教程
-
-1.  xxxx
-2.  xxxx
-3.  xxxx
+#### 环境准备
+1.  **CYT4BB7硬件环境：** 
+- 推荐使用本公司CYT4BB7核心板，[点击此处购买](https://item.taobao.com/item.htm?id=760934653313&spm=a1z10.3-c-s.w4002-22508770840.11.1e4449ccsOp8Ev)。
+2.  **软件开发环境：** 
+IAR EW for Arm 9.40.1
+- IAR当前（2024.1.15）推荐使用版本：Version: 9.40.1。
+3.  **仿真器：** 
+（CMSIS-DAP ARM调试器）
+- ARM调试器：推荐使用本公司CMSIS-DAP ARM调试器，[点击此处购买](https://item.taobao.com/item.htm?id=583404964920&spm=a1z10.3-c-s.w4002-22508770840.9.6a7549ccZacrnz)。
 
 #### 使用说明
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
-
-#### 参与贡献
-
-1.  Fork 本仓库
-2.  新建 Feat_xxx 分支
-3.  提交代码
-4.  新建 Pull Request
-
-
-#### 特技
-
-1.  使用 Readme\_XXX.md 来支持不同的语言，例如 Readme\_en.md, Readme\_zh.md
-2.  Gitee 官方博客 [blog.gitee.com](https://blog.gitee.com)
-3.  你可以 [https://gitee.com/explore](https://gitee.com/explore) 这个地址来了解 Gitee 上的优秀开源项目
-4.  [GVP](https://gitee.com/gvp) 全称是 Gitee 最有价值开源项目，是综合评定出的优秀开源项目
-5.  Gitee 官方提供的使用手册 [https://gitee.com/help](https://gitee.com/help)
-6.  Gitee 封面人物是一档用来展示 Gitee 会员风采的栏目 [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)
+1.  **下载开源库：** 点击页面右侧的克隆/下载按钮，将工程文件保存到本地。您可以使用git克隆（Clone）或下载ZIP压缩包的方式来下载。推荐使用git将工程目录克隆到本地，这样可以使用git随时与我们的开源库保持同步。关于码云与git的使用教程可以参考以下链接 [https://gitee.com/help](https://gitee.com/help)。
+2.  **打开工程：** 将下载好的工程文件夹打开（若下载的为ZIP文件，请先解压压缩包）。在打开工程前，请务必确保您的IDE满足环境要求。
