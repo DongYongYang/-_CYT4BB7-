@@ -1428,45 +1428,6 @@
     </configuration>
     <group>
         <name>code</name>
-        <group>
-            <name>kiss_fft</name>
-            <file>
-                <name>$PROJ_DIR$\..\..\code\kiss_fft\_kiss_fft_guts.h</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\..\code\kiss_fft\kfc.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\..\code\kiss_fft\kfc.h</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\..\code\kiss_fft\kiss_fft.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\..\code\kiss_fft\kiss_fft.h</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\..\code\kiss_fft\kiss_fft_log.h</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\..\code\kiss_fft\kiss_fftnd.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\..\code\kiss_fft\kiss_fftnd.h</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\..\code\kiss_fft\kiss_fftndr.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\..\code\kiss_fft\kiss_fftndr.h</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\..\code\kiss_fft\kiss_fftr.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\..\code\kiss_fft\kiss_fftr.h</name>
-            </file>
-        </group>
         <file>
             <name>$PROJ_DIR$\..\..\code\本文件夹作用.txt</name>
         </file>

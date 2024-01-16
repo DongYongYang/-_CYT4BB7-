@@ -34,58 +34,82 @@
 ********************************************************************************************************************/
 
 #include "zf_common_headfile.h"
-#include "kiss_fft.h"
+#include "arm_math.h"
 
 // 打开新的工程或者工程移动了位置务必执行以下操作
 // 第一步 关闭上面所有打开的文件
 // 第二步 project->clean  等待下方进度条走完
 
-// *************************** 例程硬件连接说明 ***********************
-// 核心板正常供电即可 无需额外连接
+// *************************** 例程硬件连接说明 ***************************
+// 使用逐飞科技 CMSIS-DAP 调试下载器连接
+//      直接将下载器正确连接在核心板的调试下载接口即可
+// 使用 USB-TTL 模块连接
+//      模块管脚            单片机管脚
+//      USB-TTL-RX          查看 zf_common_debug.h 文件中 DEBUG_UART_TX_PIN 宏定义的引脚 默认 P14_0
+//      USB-TTL-TX          查看 zf_common_debug.h 文件中 DEBUG_UART_RX_PIN 宏定义的引脚 默认 P14_1
+//      USB-TTL-GND         核心板电源地 GND
+//      USB-TTL-3V3         核心板 3V3 电源
 
-
-// *************************** 例程测试说明 **************************
-// 1.核心板烧录完成本例程，完成上电
-// 2.可以看到核心板上两个 LED 每秒周期交替闪烁
+// ***************************** 例程测试说明 *****************************
+// 1.核心板烧录完成本例程，单独使用核心板与调试下载器或者 USB-TTL 模块，在断电情况下完成连接
+// 2.将调试下载器或者 USB-TTL 模块连接电脑，完成上电
+// 3.电脑上使用逐飞助手打开对应的串口，串口波特率为 DEBUG_UART_BAUDRATE 宏定义 默认 115200，核心板按下复位按键
+// 4.可以在逐飞助手上看到如下串口信息：
+//      fft count use time: 493 us
+// 5.可以在逐飞助手的示波器界面看到FFT运算完成后的结果波形
 // 如果发现现象与说明严重不符 请参照本文件最下方 例程常见问题说明 进行排查
 
 // **************************** 代码区域 ****************************
 
+#define FFT_SIZE 1024
+
+float inputSignal[FFT_SIZE * 2];                // 定义输入信号 输入信号为复数 所以长度为 FFT_SIZE * 2
+float outputSignal[FFT_SIZE * 2];               // 定义输出信号 输出信号为复数 所以长度为 FFT_SIZE * 2
+
+uint32 fft_count_time_us = 0;
+
 int main(void)
 {
-    clock_init(SYSTEM_CLOCK_250M); 	// 时钟配置及系统初始化<务必保留>
-    debug_init();			// 初始化默认调试串口
+    clock_init(SYSTEM_CLOCK_250M); 	        // 时钟配置及系统初始化<务必保留>
+    debug_init();			        // 初始化默认调试串口
     // 此处编写用户代码 例如外设初始化代码等
 
-    // 示例输入信号
-    kiss_fft_cpx in[8];
-    kiss_fft_cpx out[8];
     
-    // 初始化输入信号
-    for (int i = 0; i < 8; ++i) {
-        in[i].r = i + 1;
-        in[i].i = 0.0;
-    }
+    for(int i = 0; i < FFT_SIZE; i++){
+        inputSignal[2*i] = i * 0.1024;          // 对输入数据虚拟赋值，实际声音信号又ADC采集   将输入填入实部，虚部为0
+        inputSignal[2*i + 1] = 0;
+    }    
 
-    // 创建FFT配置
-    kiss_fft_cfg cfg = kiss_fft_alloc(8, 0, NULL, NULL);
+    arm_cfft_instance_f32 arm_cfft_instance_f32_len_1024;                       // 定义FFT对象
+          
+    arm_cfft_init_f32(&arm_cfft_instance_f32_len_1024, FFT_SIZE);               // 初始化FFT对象 赋予计算长度
+    
+    timer_init(TC_TIME2_CH0, TIMER_US);                                         // 初始化一个定时器 用于记录FFT运算的耗时
+      
+    timer_start(TC_TIME2_CH0);                                                  // 启动定时器
+    
+    arm_cfft_f32(&arm_cfft_instance_f32_len_1024 , inputSignal , 0 , 1);        // 32位浮点FFT运算
+    
+    arm_cmplx_mag_f32(inputSignal , outputSignal , FFT_SIZE);                   // 将FFT结果转换为幅度谱
+    
+    fft_count_time_us = timer_get(TC_TIME2_CH0);                                // 获取FFT运算时长
+    
+    timer_clear(TC_TIME2_CH0);                                                  // 清除定时器计数值
+    
+    timer_stop(TC_TIME2_CH0);                                                   // 关闭定时器
+    
+    seekfree_assistant_interface_init(SEEKFREE_ASSISTANT_DEBUG_UART);           // 初始化逐飞助手组件 选择debug串口输出信息
+    
+    seekfree_assistant_oscilloscope_data.channel_num  = 1;                      // 配置通道长度为1组
 
-    // 执行FFT
-    kiss_fft(cfg, in, out);
-
-    // 打印结果
-    printf("input: ");
-    for (int i = 0; i < 8; ++i) {
-        printf("(%.1f, %.1f) ", in[i].r, in[i].i);
-    }
-
-    printf("\nFFT output: ");
-    for (int i = 0; i < 8; ++i) {
-        printf("(%.1f, %.1f) ", out[i].r, out[i].i);
-    }
-
-    // 释放资源
-    free(cfg);
+    for(int i = 0; i < FFT_SIZE; i++)
+    {
+        seekfree_assistant_oscilloscope_data.data[0] = outputSignal[i];         // 获取FFT运算后的幅度信息
+        
+        seekfree_assistant_oscilloscope_send(&seekfree_assistant_oscilloscope_data);     // 输出幅度信息到示波器                                     
+    }   
+    
+    printf("\r\n fft count use time: %d us\r\n", fft_count_time_us);            // 输出FFT运算耗时
     
     // 此处编写用户代码 例如外设初始化代码等
     
@@ -101,8 +125,11 @@ int main(void)
 
 // **************************** 代码区域 ****************************
 
-// *************************** 例程常见问题说明 ***************************
+// **************************** 例程常见问题说明 ****************************
 // 遇到问题时请按照以下问题检查列表检查
-// 问题1：LED 不闪烁
-//      查看程序是否正常烧录，是否下载报错，确认正常按下复位按键
-//      万用表测量对应 LED 引脚电压是否变化，如果不变化证明程序未运行，如果变化证明 LED 灯珠损坏
+// 问题1：串口没有数据
+//      查看逐飞助手打开的是否是正确的串口，检查打开的 COM 口是否对应的是调试下载器或者 USB-TTL 模块的 COM 口
+//      如果是使用逐飞科技 英飞凌TriCore 调试下载器连接，那么检查下载器线是否松动，检查核心板串口跳线是否已经焊接，串口跳线查看核心板原理图即可找到
+//      如果是使用 USB-TTL 模块连接，那么检查连线是否正常是否松动，模块 TX 是否连接的核心板的 RX，模块 RX 是否连接的核心板的 TX
+// 问题2：串口数据乱码
+//      查看逐飞助手设置的波特率是否与程序设置一致，程序中 zf_common_debug.h 文件中 DEBUG_UART_BAUDRATE 宏定义为 debug uart 使用的串口波特率
