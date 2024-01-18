@@ -34,8 +34,6 @@
 ********************************************************************************************************************/
 
 #include "cmsis_compiler.h"
-#include "cyip_coredefines.h"
-#include "core_cm7.h"
 #include "zf_common_interrupt.h"
 #include "zf_driver_pwm.h"
 
@@ -83,18 +81,3 @@ void assert_interrupt_config (void)
     interrupt_global_disable();                 // 全局中断失能
     pwm_all_channel_close();                    // 关闭PWM所有通道输出
 }
-
-
-//-------------------------------------------------------------------------------------------------------------------
-// 函数简介     指定中断设置优先级
-// 参数说明     irqn            指定中断号 可查看 isr.c 对应中断服务函数的标注
-// 参数说明     priority        中断优先级 0-7 越低越高
-// 返回参数     void
-// 使用示例     interrupt_set_priority(UART1_IRQn, 0);
-// 备注信息     
-//-------------------------------------------------------------------------------------------------------------------
-void interrupt_set_priority (IRQn_Type irqn, uint8 priority)
-{
-    NVIC_SetPriority(irqn, priority);
-}
-

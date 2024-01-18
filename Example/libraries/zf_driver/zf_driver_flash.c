@@ -111,7 +111,7 @@ void flash_write_page (uint32 sector_num, uint32 page_num, const uint32 *buf, ui
     zf_assert(FLASH_PAGE_LENGTH >= len);
     zf_assert(flash_init_flag);				// 用户未初始化flash则断言报错
     
-    if(0 == flash_check(sector_num, page_num))
+    if(0 != flash_check(sector_num, page_num))
     {
         flash_erase_page(sector_num, page_num);
     }
