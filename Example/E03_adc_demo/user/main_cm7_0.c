@@ -71,15 +71,15 @@
 
 #define CHANNEL_NUMBER          (8)
 
-#define ADC_CHANNEL1            (ADC1_CH9_P12_5)
-#define ADC_CHANNEL2            (ADC1_CH8_P12_4)
-#define ADC_CHANNEL3            (ADC1_CH4_P12_0)
-#define ADC_CHANNEL4            (ADC1_CH24_P14_4)
+#define ADC_CHANNEL1            (ADC1_CH25_P14_5)
+#define ADC_CHANNEL2            (ADC1_CH24_P14_4)
+#define ADC_CHANNEL3            (ADC1_CH9_P12_5)
+#define ADC_CHANNEL4            (ADC1_CH8_P12_4)
 
-#define ADC_CHANNEL5            (ADC1_CH25_P14_5)
+#define ADC_CHANNEL5            (ADC1_CH4_P12_0)
 #define ADC_CHANNEL6            (ADC1_CH0_P10_4)
-#define ADC_CHANNEL7            (ADC0_CH0_P6_0)
-#define ADC_CHANNEL8            (ADC0_CH1_P6_1)
+#define ADC_CHANNEL7            (ADC0_CH1_P6_1)
+#define ADC_CHANNEL8            (ADC0_CH0_P6_0)
 
 uint8 channel_index = 0;
 adc_channel_enum channel_list[CHANNEL_NUMBER] =
