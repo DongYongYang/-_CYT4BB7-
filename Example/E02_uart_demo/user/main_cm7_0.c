@@ -85,7 +85,7 @@ fifo_struct uart_data_fifo;
 int main(void)
 {
     clock_init(SYSTEM_CLOCK_250M); 	// 时钟配置及系统初始化<务必保留>
-    debug_init();			// 初始化默认调试串口
+    debug_info_init();                  // 调试串口信息初始化
     // 此处编写用户代码 例如外设初始化代码等
 
     fifo_init(&uart_data_fifo, FIFO_DATA_8BIT, uart_get_data, 64);              // 初始化 fifo 挂载缓冲区

@@ -77,7 +77,7 @@ void my_ipc_callback(uint32 receive_data)
 int main(void)
 {
     clock_init(SYSTEM_CLOCK_250M); 	// 时钟配置及系统初始化<务必保留>
-    debug_init();			// 初始化默认调试串口
+    debug_info_init();                  // 调试串口信息初始化
     // 此处编写用户代码 例如外设初始化代码等
     SCB_DisableDCache(); // 关闭DCache
     

@@ -67,7 +67,7 @@ pwm_channel_enum channel_list[CHANNEL_NUMBER] = {PWM_CH1, PWM_CH2, PWM_CH3, PWM_
 int main(void)
 {
     clock_init(SYSTEM_CLOCK_250M); 	// 时钟配置及系统初始化<务必保留>
-    debug_init();			// 初始化默认调试串口
+    debug_info_init();                  // 调试串口信息初始化
     // 此处编写用户代码 例如外设初始化代码等
 
     pwm_init(PWM_CH1, 17000, 0);                                                // 初始化 PWM 通道 频率 17KHz 初始占空比 0%
