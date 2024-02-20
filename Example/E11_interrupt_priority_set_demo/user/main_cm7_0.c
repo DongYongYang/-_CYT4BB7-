@@ -64,7 +64,7 @@ int main(void)
 
     gpio_init(LED1, GPO, GPIO_LOW,  GPO_PUSH_PULL);                             // 初始化 LED1 输出 默认低电平 推挽输出模式
     pit_ms_init(PIT_NUM, 500);                                                  // 初始化 CCU6_0_CH0 为周期中断 1000ms 周期
-    interrupt_set_priority(PIT_PRIORITY, 1);                                    // 设置 PIT 对周期中断的中断优先级为 1
+    interrupt_set_priority(PIT_PRIORITY, 1);                                    // 设置 PIT 周期中断的中断优先级为 1（由于独特的中断查询方式，所有PIT中断都是用的一个中断向量）
     
     // 此处编写用户代码 例如外设初始化代码等
     while(true)

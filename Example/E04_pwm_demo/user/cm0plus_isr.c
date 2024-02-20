@@ -39,6 +39,7 @@
 void pit0_ch0_isr()
 {
     pit_isr_flag_clear(PIT_CH0);
+  
 
 	
 	
@@ -349,12 +350,14 @@ void uart3_isr (void)
 
 void uart4_isr (void)
 {
+    
     if(Cy_SCB_GetRxInterruptMask(get_scb_module(UART_4)) & CY_SCB_UART_RX_NOT_EMPTY)            // 串口4接收中断
     {
         Cy_SCB_ClearRxInterrupt(get_scb_module(UART_4), CY_SCB_UART_RX_NOT_EMPTY);              // 清除接收中断标志位
 
         
         uart_receiver_handler();                                                                // 串口接收机回调函数
+        
         
     }
     else if(Cy_SCB_GetTxInterruptMask(get_scb_module(UART_4)) & CY_SCB_UART_TX_DONE)            // 串口4发送中断

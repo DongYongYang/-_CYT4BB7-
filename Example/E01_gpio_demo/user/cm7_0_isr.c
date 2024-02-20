@@ -36,7 +36,6 @@
 
 #include "zf_common_headfile.h"
 // **************************** PIT中断函数 ****************************
-
 void pit0_ch0_isr()
 {
     pit_isr_flag_clear(PIT_CH0);
@@ -77,20 +76,19 @@ void gpio_0_exti_isr()
   
 }
 
-
 void gpio_1_exti_isr()
 {
     if(exti_flag_get(P01_0))				// 示例P1_0端口外部中断判断
     {
-        
-        gpio_toggle_level(P19_0);
+
+      
       
             
     }
     if(exti_flag_get(P01_1))
     {
 
-        gpio_toggle_level(P19_0);      
+            
             
     }
 }
@@ -99,12 +97,12 @@ void gpio_2_exti_isr()
 {
     if(exti_flag_get(P02_0))
     {
-        gpio_toggle_level(P19_0);    
+            
             
     }
-    if(exti_flag_get(P02_1))
+    if(exti_flag_get(P02_4))
     {
-        gpio_toggle_level(P19_0);    
+            
             
     }
 
@@ -352,10 +350,12 @@ void uart3_isr (void)
 
 void uart4_isr (void)
 {
+    
     if(Cy_SCB_GetRxInterruptMask(get_scb_module(UART_4)) & CY_SCB_UART_RX_NOT_EMPTY)            // 串口4接收中断
     {
         Cy_SCB_ClearRxInterrupt(get_scb_module(UART_4), CY_SCB_UART_RX_NOT_EMPTY);              // 清除接收中断标志位
 
+        
         uart_receiver_handler();                                                                // 串口接收机回调函数
         
         

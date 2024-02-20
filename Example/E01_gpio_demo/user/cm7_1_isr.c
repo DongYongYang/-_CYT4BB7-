@@ -36,12 +36,11 @@
 
 #include "zf_common_headfile.h"
 // **************************** PIT中断函数 ****************************
-extern uint8 pit_state;
 void pit0_ch0_isr()
 {
     pit_isr_flag_clear(PIT_CH0);
   
-    pit_state = !pit_state;
+
 	
 	
 	
@@ -351,11 +350,13 @@ void uart3_isr (void)
 
 void uart4_isr (void)
 {
+    
     if(Cy_SCB_GetRxInterruptMask(get_scb_module(UART_4)) & CY_SCB_UART_RX_NOT_EMPTY)            // 串口4接收中断
     {
         Cy_SCB_ClearRxInterrupt(get_scb_module(UART_4), CY_SCB_UART_RX_NOT_EMPTY);              // 清除接收中断标志位
 
-        uart_receiver_handler();                                                                // 串口接收机回调函数	    
+        
+        uart_receiver_handler();                                                                // 串口接收机回调函数
         
         
     }

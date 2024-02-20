@@ -88,6 +88,7 @@ int main(void)
     printf("Timer count is %d us.\r\n", timer_get(TC_TIME2_CH0));               // 获取定时器的值并输出
     timer_clear(TC_TIME2_CH0);                                                  // 计时值使用完毕后记得清除，避免导致下次计时不从0开始
     
+    
     timer_init(TC_TIME2_CH0, TIMER_MS);                                         // 定时器使用 TC_TIME2_CH0 使用毫秒级计数
     timer_start(TC_TIME2_CH0);                                                  // 启动定时
     system_delay_ms(1000);                                                      //

@@ -80,8 +80,8 @@ int main(void)
     gpio_init(KEY3, GPI, GPIO_HIGH, GPI_PULL_UP);           // 初始化 KEY3 输入 默认高电平 上拉输入
     gpio_init(KEY4, GPI, GPIO_HIGH, GPI_PULL_UP);           // 初始化 KEY4 输入 默认高电平 上拉输入
 
-    gpio_init(SWITCH1, GPI, GPIO_HIGH, GPI_PULL_UP);    // 初始化 SWITCH1 输入 默认高电平 上拉输入
-    gpio_init(SWITCH2, GPI, GPIO_HIGH, GPI_PULL_UP);    // 初始化 SWITCH2 输入 默认高电平 上拉输入
+    gpio_init(SWITCH1, GPI, GPIO_HIGH, GPI_PULL_UP);        // 初始化 SWITCH1 输入 默认高电平 上拉输入
+    gpio_init(SWITCH2, GPI, GPIO_HIGH, GPI_PULL_UP);        // 初始化 SWITCH2 输入 默认高电平 上拉输入
     
     
     // 此处编写用户代码 例如外设初始化代码等

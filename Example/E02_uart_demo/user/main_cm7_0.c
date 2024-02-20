@@ -39,6 +39,7 @@
 // 第一步 关闭上面所有打开的文件
 // 第二步 project->clean  等待下方进度条走完
 
+
 // *************************** 例程硬件连接说明 ***************************
 // 使用逐飞科技 CMSIS-DAP 调试下载器连接
 //      直接将下载器正确连接在核心板的调试下载接口即可
@@ -82,6 +83,7 @@ uint8  get_data = 0;                                                            
 uint32 fifo_data_count = 0;                                                     // fifo 数据个数
 
 fifo_struct uart_data_fifo;
+
 int main(void)
 {
     clock_init(SYSTEM_CLOCK_250M); 	// 时钟配置及系统初始化<务必保留>
@@ -97,7 +99,6 @@ int main(void)
     uart_write_byte(UART_INDEX, '\r');                                          // 输出回车
     uart_write_byte(UART_INDEX, '\n');                                          // 输出换行
     
-    
 
     // 此处编写用户代码 例如外设初始化代码等
     while(true)
@@ -112,12 +113,12 @@ int main(void)
             uart_write_buffer(UART_INDEX, fifo_get_data, fifo_data_count);      // 将读取到的数据发送出去
         }
         system_delay_ms(10);
-      
 
 
         // 此处编写需要循环执行的代码
     }
 }
+
 //-------------------------------------------------------------------------------------------------------------------
 // 函数简介       UART_INDEX 的接收中断处理函数 这个函数将在 UART_INDEX 对应的中断调用
 // 参数说明       void
@@ -133,9 +134,7 @@ void uart_rx_interrupt_handler (void)
     }
 }
 
-
 // **************************** 代码区域 ****************************
-
 // **************************** 例程常见问题说明 ****************************
 // 遇到问题时请按照以下问题检查列表检查
 // 问题1：串口没有数据
@@ -144,3 +143,7 @@ void uart_rx_interrupt_handler (void)
 //      如果是使用 USB-TTL 模块连接，那么检查连线是否正常是否松动，模块 TX 是否连接的核心板的 RX，模块 RX 是否连接的核心板的 TX
 // 问题2：串口数据乱码
 //      查看串口助手设置的波特率是否与程序设置一致，程序中 zf_common_debug.h 文件中 DEBUG_UART_BAUDRATE 宏定义为 debug uart 使用的串口波特率
+
+
+
+

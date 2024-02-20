@@ -90,8 +90,6 @@ int main(void)
     
     arm_cfft_f32(&arm_cfft_instance_f32_len_1024 , inputSignal , 0 , 1);        // 32位浮点FFT运算
     
-    arm_cmplx_mag_f32(inputSignal , outputSignal , FFT_SIZE);                   // 将FFT结果转换为幅度谱
-    
     fft_count_time_us = timer_get(TC_TIME2_CH0);                                // 获取FFT运算时长
     
     timer_clear(TC_TIME2_CH0);                                                  // 清除定时器计数值
@@ -102,6 +100,8 @@ int main(void)
     
     seekfree_assistant_oscilloscope_data.channel_num  = 1;                      // 配置通道长度为1组
 
+    arm_cmplx_mag_f32(inputSignal , outputSignal , FFT_SIZE);                   // 将FFT结果转换为幅度谱
+    
     for(int i = 0; i < FFT_SIZE; i++)
     {
         seekfree_assistant_oscilloscope_data.data[0] = outputSignal[i];         // 获取FFT运算后的幅度信息
