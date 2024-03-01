@@ -57,39 +57,73 @@
 // 3.电脑上使用串口助手打开对应的串口，串口波特率为 zf_common_debug.h 文件中 DEBUG_UART_BAUDRATE 宏定义 默认 115200，核心板按下复位按键
 // 
 // 4.可以在串口助手上看到如下串口信息：
-//      receive M7_0 data:0
-//      receive M7_0 data:1
-//      receive M7_1 data:1
-//      receive M7_0 data:2
-//      receive M7_0 data:3
-//      receive M7_1 data:2
+//  m0_data:0,1,2,3,4,
+//  m7_1_data:0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0,
+//  m0_data:0,1,2,3,4,
+//  m7_1_data:0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0,1.1,
+//  m0_data:0,1,2,3,4,
+//  m7_1_data:0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0,1.1,
+//  m0_data:0,1,2,3,4,
+//  m7_1_data:0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0,1.1,
+//  m0_data:1,2,3,4,5,
+//  m7_1_data:0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0,1.1,1.2,
 // 
 // 如果发现现象与说明严重不符 请参照本文件最下方 例程常见问题说明 进行排查
 
 // **************************** 代码区域 ****************************
-uint32 send_data_test = 0;
-// 定义数据接收回调函数 如果另外一个核心发送信息 此核心会触发中断并且可以在回调函数读取数据
-void my_ipc_callback(uint32 receive_data)
-{
-    printf("receive M7_1 data:%d\r\n", receive_data);        // 将接收到的数据打印到串口     
-}
+#define M0_FLASH_SECTION_INDEX       (0)                                        // 存储 M0数据地址及长度 用的扇区
+#define M0_FLASH_PAGE_INDEX          (0)                                        // 存储 M0数据地址及长度 用的页码 
+
+#define M7_1_FLASH_SECTION_INDEX     (0)                                        // 存储 M7_1数据地址及长度 用的扇区
+#define M7_1_FLASH_PAGE_INDEX        (1)                                        // 存储 M7_1数据长度及长度 用的页码 
+
+volatile uint32 *m0_data;                                                      // 定义一个数据指针 用于通过地址直接访问M0数据 
+uint32 m0_data_length;                                                          // 定义M0数据的长度 
+
+volatile float *m7_1_data;                                                     // 定义一个数据指针 用于通过地址直接访问M7_1数据 
+uint32 m7_1_data_length;                                                        // 定义M7_1数据的长度 
 
 int main(void)
 {
     clock_init(SYSTEM_CLOCK_250M); 	// 时钟配置及系统初始化<务必保留>
     debug_info_init();                  // 调试串口信息初始化
     // 此处编写用户代码 例如外设初始化代码等
-    SCB_DisableDCache(); // 关闭DCache
+
+    system_delay_ms(500);                                                       // 等待M0和M7_1将地址保存到flash  也可以使用查询flash数据的方式(此处不演示)
     
-    ipc_communicate_init(IPC_PORT_1, my_ipc_callback);          // 初始化IPC模块 选择端口1 填写中断回调函数
+    flash_init();                                                               // flash初始化(访问flash之前需要初始化一次)
+    
+    flash_read_page_to_buffer(M0_FLASH_SECTION_INDEX, M0_FLASH_PAGE_INDEX, 2);  // 读取M0数据地址所在页的数据               
+    m0_data = (volatile uint32 *)flash_union_buffer[0].uint32_type;             // 保存地址和长度 使用指针直接访问
+    m0_data_length = flash_union_buffer[1].uint32_type;
+    
+    flash_read_page_to_buffer(M7_1_FLASH_SECTION_INDEX, M7_1_FLASH_PAGE_INDEX, 2);  // 读取M7_1数据地址所在页的数据                  
+    m7_1_data = (volatile float *)flash_union_buffer[0].uint32_type;            // 保存地址和长度 使用指针直接访问
+    m7_1_data_length = flash_union_buffer[1].uint32_type;
+    
     // 此处编写用户代码 例如外设初始化代码等
     while(true)
     {
         // 此处编写需要循环执行的代码
 
-        ipc_send_data(send_data_test ++);               // 发送数据给核心M7_1
-        system_delay_ms(500);
-
+        system_delay_ms(100);                                                   // 主循环延时
+        
+        SCB_CleanInvalidateDCache();                                            // M7_0有Dcashe 读取数据之前需要更新DCache的数据
+        
+        printf("m0_data:");                                                     // 直接将数据打印到串口
+        for(int i = 0; i < m0_data_length; i ++)
+        {
+            
+            printf("%d,", m0_data[i]);
+        }
+        printf("\r\n");
+        
+        printf("m7_1_data:");        
+        for(int i = 0; i < m7_1_data_length; i ++)
+        {
+            printf("%.1f,", m7_1_data[i]);
+        }
+        printf("\r\n");
         
         // 此处编写需要循环执行的代码
     }
