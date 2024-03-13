@@ -35,12 +35,13 @@
 
 
 #include "zf_common_headfile.h"
+extern uint8 pit_state;
 // **************************** PITÖÐ¶Ïº¯Êý ****************************
 void pit0_ch0_isr()
 {
     pit_isr_flag_clear(PIT_CH0);
-  
-
+    
+    pit_state = 1;
 	
 	
 	
