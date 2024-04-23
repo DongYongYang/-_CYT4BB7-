@@ -96,9 +96,9 @@ int main(void)
     
     seekfree_assistant_oscilloscope_data.channel_num  = 2;                      // 配置通道长度为1组
     
-    arm_cfft_instance_f32 arm_cfft_instance_f32_len_1024;                       // 定义FFT对象
+    arm_cfft_instance_f32 arm_cfft_instance_f32_len_2048;                       // 定义FFT对象
           
-    arm_cfft_init_f32(&arm_cfft_instance_f32_len_1024, FFT_SIZE);               // 初始化FFT对象 赋予计算长度
+    arm_cfft_init_f32(&arm_cfft_instance_f32_len_2048, FFT_SIZE);               // 初始化FFT对象 赋予计算长度
     
     timer_init(TC_TIME2_CH0, TIMER_US);                                         // 初始化一个定时器 用于记录FFT运算的耗时
     // **************************** 初始化内容 ****************************
@@ -107,7 +107,7 @@ int main(void)
     // ***************************** FFT运算 *****************************  
     timer_start(TC_TIME2_CH0);                                                  // 启动定时器
     
-    arm_cfft_f32(&arm_cfft_instance_f32_len_1024 , inputSignal , 0 , 1);        // 32位浮点FFT运算(运算结果将替换原inputSignal的内容)
+    arm_cfft_f32(&arm_cfft_instance_f32_len_2048 , inputSignal , 0 , 1);        // 32位浮点FFT运算(运算结果将替换原inputSignal的内容)
     
     fft_count_time_us = timer_get(TC_TIME2_CH0);                                // 获取FFT运算时长
     
@@ -122,7 +122,7 @@ int main(void)
     // **************************** 逆FFT运算 **************************** 
     timer_start(TC_TIME2_CH0);                                                  // 启动定时器
     
-    arm_cfft_f32(&arm_cfft_instance_f32_len_1024 , inputSignal , 1 , 1);        // 32位浮点逆FFT运算(运算结果将替换原inputSignal的内容)
+    arm_cfft_f32(&arm_cfft_instance_f32_len_2048 , inputSignal , 1 , 1);        // 32位浮点逆FFT运算(运算结果将替换原inputSignal的内容)
     
     ifft_count_time_us = timer_get(TC_TIME2_CH0);                               // 获取逆FFT运算时长
     
