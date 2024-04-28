@@ -72,7 +72,7 @@ int main(void)
 
     flash_init();                                                               // 使用flash前先调用flash初始化
     
-    if(flash_check(FLASH_SECTION_INDEX, FLASH_PAGE_INDEX) == 0)                 // 判断是否有数据
+    if(flash_check(FLASH_SECTION_INDEX, FLASH_PAGE_INDEX))                      // 判断是否有数据
         flash_erase_page(FLASH_SECTION_INDEX, FLASH_PAGE_INDEX);                // 擦除这一页
 
     printf("\r\n");
